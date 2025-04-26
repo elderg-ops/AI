@@ -1,0 +1,68 @@
+% Facts: Defining male and female members
+male(varkey).
+male(sindo).
+male(adrian).
+male(vivian).
+male(anthony).
+
+female(elsy).
+female(sini).
+female(evania).
+
+% Facts: Parent-child relationships
+parent(varkey, sini).
+parent(elsy, sini).
+parent(varkey, sindo).
+parent(elsy, sindo).
+
+parent(sini, adrian).
+parent(sini, vivian).
+parent(sini, evania).
+
+parent(anthony, adrian).
+parent(anthony, vivian).
+parent(anthony, evania).
+
+% Siblings Rule (ensuring both parents are the same)
+siblings(X, Y) :-
+    parent(P1, X), parent(P1, Y),
+    parent(P2, X), parent(P2, Y),
+    X \= Y, P1 @< P2.
+
+% Brother and Sister Rules
+brother(X, Y) :-
+    male(X),
+    siblings(X, Y).
+
+sister(X, Y) :-
+    female(X),
+    siblings(X, Y).
+
+% Grandparent Rules
+grandfather(X, Y) :-
+    male(X),
+    parent(X, P),
+    parent(P, Y).
+
+grandmother(X, Y) :-
+    female(X),
+    parent(X, P),
+    parent(P, Y).
+
+% Uncle and Aunt Rules
+uncle(X, Y) :-
+    male(X),
+    parent(P, Y),
+    siblings(X, P).
+
+aunt(X, Y) :-
+    female(X),
+    parent(P, Y),
+    siblings(X, P).
+
+% Cousins Rule
+cousins(X, Y) :-
+    parent(P1, X),
+    parent(P2, Y),
+    siblings(P1, P2),
+    X \= Y.
